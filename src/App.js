@@ -1,25 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react'
+import SocketProvider from './providers/Socket';
+import { PeerProvider } from './providers/Peer';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Room from './pages/Room';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <Layout />,
+		children: [
+			{
+				path: "home",
+				element: <Home />,
+			},
+			{
+				path: "room/:roomId",
+				element: <Room />,
+			},
+		],
+	}
+])
+
+const App = () => {
+	return (
+		<SocketProvider>
+			<PeerProvider>
+				<ChakraProvider>
+					<RouterProvider router={router} />
+				</ChakraProvider>
+			</PeerProvider>
+		</SocketProvider>
+	);
 }
 
 export default App;
